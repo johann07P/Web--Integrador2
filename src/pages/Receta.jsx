@@ -1,14 +1,35 @@
 import { useState } from "react";
+import {
+  GuardarRecetaMedica,
+  GuardarRecetaMedicina,
+} from "../API/API_Hospital";
+import dayjs from "dayjs";
 
 export default function Receta() {
+  //Guardar Medicamentos
   const [Medicamentos, setMedicamentos] = useState([]);
+
+  //Guardar RecetaConMedicamentos
+  async function loadTasks() {
+    const DNI = document.querySelector("#DNI").value;
+    const NombreMedico = document.querySelector("#NombreMedico").value;
+    const res = await GuardarRecetaMedica(DNI, NombreMedico);
+    GuardarRecetaMedicina(res.data.id, Medicamentos);
+    setMedicamentos([]);
+    alert("Receta Guardada");
+    document.querySelector("#DNI").value = "";
+  }
+
+  // Generar fecha del dia
+  const day = dayjs().format("DD-MM-YYYY");
+
+  //Agregar Medicamentos a la lista
   const medicamento = {};
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     medicamento[name] = value;
   };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     setMedicamentos([...Medicamentos, medicamento]);
@@ -20,10 +41,16 @@ export default function Receta() {
       <h2 className="w-full text-center">RECETA</h2>
       <div className="flex flex-col gap-4 w-full px-20">
         <header className="flex justify-between">
-          <p>FECHA</p>
-          <p>DNI</p>
-          <p>NOMBRE</p>
-          <p>MEDICO</p>
+          <p>
+            FECHA <input type="text" value={day} disabled />
+          </p>
+          <p>
+            DNI <input type="text" id="DNI" />
+          </p>
+          <p>
+            MEDICO{" "}
+            <input type="text" value="Juan Carlos" disabled id="NombreMedico" />
+          </p>
         </header>
         <section className=" flex flex-col gap-4">
           <form onSubmit={handleSubmit} className=" flex justify-between">
@@ -66,6 +93,7 @@ export default function Receta() {
           </table>
         </section>
       </div>
+      <button onClick={loadTasks}>Guardar</button>
     </section>
   );
 }
