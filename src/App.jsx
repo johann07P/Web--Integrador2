@@ -1,9 +1,19 @@
 
 
-function App() {
-  return <div className="bg-cyan-500">
-    hola mundo
-  </div>
-}
+import HeroSection from "./components/HeroSection";
+import Navbar from "./components/Navbar";
 
-export default App
+const App = () => {
+  return (
+    <>
+      <Navbar/>
+      <div className="max-w-7xl mx-auto pt-20 px-6">
+      <HeroSection />
+      </div>
+      
+    </>
+  );
+};
+
+export default App;
+
